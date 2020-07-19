@@ -24,6 +24,11 @@ public class SwipeButton {
     private SwipeButtonClickListener clickListener;
 
     /**
+     * Width of a single @{@link SwipeButton}. Default value is {@value}.
+     */
+    static int buttonWidth = 200;
+
+    /**
      * Instantiates a single instance of @{@link SwipeButton}
      *
      * @param context       Defines environment context
@@ -57,7 +62,6 @@ public class SwipeButton {
     }
 
     /**
-     *
      * @param canvas   Surface on which objects are drawn
      * @param rect     Item area of @{@link SwipeButton}
      * @param position Current item position within the @{@link androidx.recyclerview.widget.RecyclerView}
@@ -71,17 +75,22 @@ public class SwipeButton {
         canvas.drawRect(rect, paint);
 
         // Draw Text
-        paint.setColor(Color.WHITE);
-        paint.setTextSize((12 * Resources.getSystem().getDisplayMetrics().density));
-
-        Rect r = new Rect();
+        float density = Resources.getSystem().getDisplayMetrics().density;
         float cHeight = rect.height();
         float cWidth = rect.width();
+        paint.setAntiAlias(true);
         paint.setTextAlign(Paint.Align.LEFT);
-        paint.getTextBounds(text, 0, text.length(), r);
-        float x = cWidth / 2f - r.width() / 2f - r.left;
-        float y = cHeight / 2f + r.height() / 2f - r.bottom;
-        canvas.drawText(text, rect.left + x, rect.top + y, paint);
+        paint.setTextSize((12 * density));
+        int textColor = Color.WHITE;
+        textColor = Color.argb((int) (255 * (cWidth / (float) buttonWidth)), Color.red(textColor), Color.green(textColor), Color.blue(textColor));
+        paint.setColor(textColor);
+        Rect textBounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), textBounds);
+        float x = cWidth / 2f - textBounds.width() / 2f - textBounds.left;
+        float y = cHeight / 2f + textBounds.height() / 2f - textBounds.bottom;
+
+        if (textBounds.width() + 16 * density < rect.width())
+            canvas.drawText(text, rect.left + x, rect.top + y, paint);
 
         // Draw Icon
         /*

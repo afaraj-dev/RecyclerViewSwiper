@@ -34,11 +34,6 @@ import static androidx.recyclerview.widget.ItemTouchHelper.RIGHT;
  */
 public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback {
 
-    /**
-     * Width of a single @{@link SwipeButton}. Default value is {@value}.
-     */
-    private int buttonWidth = 200;
-
     private RecyclerView recyclerView;
 
     private GestureDetector swipeButtonGestureDetector;
@@ -145,7 +140,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
     }
 
     public void setButtonWidth(int width) {
-        this.buttonWidth = width;
+        SwipeButton.buttonWidth = width;
     }
 
     /**
@@ -209,7 +204,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
 
         swipeButtonsBufferRight.clear();
         swipeButtonsBufferLeft.clear();
-        swipeThreshold = 0.5f * swipeButtons.size() * buttonWidth;
+        swipeThreshold = 0.5f * swipeButtons.size() * SwipeButton.buttonWidth;
         recoverSwipedItem();
 
     }
@@ -267,7 +262,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 // Make sure to swipe just as wide as the width of all pre-defined SwipeButtons together
                 // Swipe to the left, means coordinates are negative values!
 
-                translationX = Math.max(dX, buffer.size() * -buttonWidth);
+                translationX = Math.max(dX, buffer.size() * -SwipeButton.buttonWidth);
 
                 // Draw defined SwipeButtons on the right sind of the specific item
 
@@ -293,7 +288,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 // Make sure to swipe just as wide as the width of all pre-defined SwipeButtons together
                 // Swipe to the right, means coordinates are positive values!
 
-                translationX = Math.min(dX, buffer.size() * buttonWidth);
+                translationX = Math.min(dX, buffer.size() * SwipeButton.buttonWidth);
 
                 // Draw defined SwipeButtons on the left sind of the specific item
 
@@ -339,7 +334,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
         float right = itemView.getRight();
         float buttonWidth = (-1) * dX / swipeButtons.size();
 
-        for (int i = swipeButtons.size()-1; i >= 0; i--) {
+        for (int i = swipeButtons.size() - 1; i >= 0; i--) {
             SwipeButton swipeButton = swipeButtons.get(i);
             float left = right - buttonWidth;
             swipeButton.onDraw(canvas, new RectF(left, itemView.getTop(), right, itemView.getBottom()), position);
