@@ -339,7 +339,8 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
         float right = itemView.getRight();
         float buttonWidth = (-1) * dX / swipeButtons.size();
 
-        for (SwipeButton swipeButton : swipeButtons) {
+        for (int i = swipeButtons.size()-1; i >= 0; i--) {
+            SwipeButton swipeButton = swipeButtons.get(i);
             float left = right - buttonWidth;
             swipeButton.onDraw(canvas, new RectF(left, itemView.getTop(), right, itemView.getBottom()), position);
             right = left;
