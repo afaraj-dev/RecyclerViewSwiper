@@ -44,45 +44,45 @@ Add the dependency:
 
 ## How to use it:
 ```java
-RecyclerViewSwiper swiper = new RecyclerViewSwiper(this, this.recyclerView) {
-    @Override
-    public void initSwipeButtonRight(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
-
-        // DELETE
-
-        swipeButtons.add(new SwipeButton(MainActivity.this, "DELETE", Color.RED, new SwipeButtonClickListener() {
+public class MainActivity extends AppCompatActivity {
+    //...
+    private void addSwiper() {
+        RecyclerViewSwiper swiper = new RecyclerViewSwiper(this, this.recyclerView) {
             @Override
-            public void onClick(int position) {
-                items.remove(position);
-                adapter.notifyDataSetChanged();
+            public void initSwipeButtonStart(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
+                // INFO
+                swipeButtons.add(new SwipeButton(MainActivity.this, "INFO", Color.BLUE, new SwipeButtonClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        Toast.makeText(MainActivity.this, items.get(position), Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                    }
+                }));
             }
-        }));
 
-        // COPY
-
-        swipeButtons.add(new SwipeButton(MainActivity.this, "COPY", Color.BLACK, new SwipeButtonClickListener() {
             @Override
-            public void onClick(int position) {
-                items.add(items.get(position));
-                adapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this, items.get(position) + " added", Toast.LENGTH_SHORT).show();
+            public void initSwipeButtonEnd(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
+                // DELETE
+                swipeButtons.add(new SwipeButton(MainActivity.this, "DELETE", Color.RED, new SwipeButtonClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        items.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                }));
+
+                // COPY
+                swipeButtons.add(new SwipeButton(MainActivity.this, "COPY", Color.BLACK, new SwipeButtonClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        items.add(items.get(position));
+                        adapter.notifyDataSetChanged();
+                        Toast.makeText(MainActivity.this, items.get(position) + " added", Toast.LENGTH_SHORT).show();
+                    }
+                }));
             }
-        }));
+        };
+        swiper.setButtonWidth(200);
     }
-
-    @Override
-    public void initSwipeButtonLeft(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
-
-        // INFO
-
-        swipeButtons.add(new SwipeButton(MainActivity.this, "INFO", Color.BLUE, new SwipeButtonClickListener() {
-            @Override
-            public void onClick(int position) {
-                Toast.makeText(MainActivity.this, items.get(position), Toast.LENGTH_SHORT).show();
-                adapter.notifyDataSetChanged();
-            }
-        }));
-    }
-};
-swiper.setButtonWidth(200);
+}
 ```
