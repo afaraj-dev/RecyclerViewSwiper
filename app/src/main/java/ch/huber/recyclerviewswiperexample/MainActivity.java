@@ -5,9 +5,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -64,10 +61,20 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerViewSwiper swiper = new RecyclerViewSwiper(this, this.recyclerView) {
             @Override
-            public void initSwipeButtonRight(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
+            public void initSwipeButtonStart(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
+                // INFO
+                swipeButtons.add(new SwipeButton(MainActivity.this, "INFO", Color.BLUE, new SwipeButtonClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        Toast.makeText(MainActivity.this, items.get(position), Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
+                    }
+                }));
+            }
 
+            @Override
+            public void initSwipeButtonEnd(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
                 // DELETE
-
                 swipeButtons.add(new SwipeButton(MainActivity.this, "DELETE", Color.RED, new SwipeButtonClickListener() {
                     @Override
                     public void onClick(int position) {
@@ -77,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 }));
 
                 // COPY
-
                 swipeButtons.add(new SwipeButton(MainActivity.this, "COPY", Color.BLACK, new SwipeButtonClickListener() {
                     @Override
                     public void onClick(int position) {
@@ -88,21 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 }));
             }
 
-            @Override
-            public void initSwipeButtonLeft(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons) {
-
-                // INFO
-
-                swipeButtons.add(new SwipeButton(MainActivity.this, "INFO", Color.BLUE, new SwipeButtonClickListener() {
-                    @Override
-                    public void onClick(int position) {
-                        Toast.makeText(MainActivity.this, items.get(position), Toast.LENGTH_SHORT).show();
-                        adapter.notifyDataSetChanged();
-                    }
-                }));
-            }
         };
-        swiper.setButtonWidth(200);
+        swiper.setButtonWidth(100);
 
     }
 
