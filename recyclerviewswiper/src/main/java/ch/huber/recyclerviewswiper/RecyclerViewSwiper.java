@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.LayoutDirection;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +29,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.RIGHT;
  * Handles swipe gestures on a @{@link RecyclerView} instance. Currently LEFT and RIGHT swipes with
  * multiple @{@link SwipeButton} are supported.
  *
- * @author  Michael Huber
+ * @author Michael Huber
  * @version 1.0
  */
 public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback {
@@ -51,6 +52,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
 
     private int swipedItemPosition = -1;
     private float swipeThreshold = 0.5f;
+    private int layoutDirection = LayoutDirection.LTR;
 
     /**
      * Gesture-Listener will notify when a motion gesture event has occured. For example, when
@@ -253,8 +255,10 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 if (!swipeButtonsBufferRight.containsKey(position)) {
 
                     // Sets the item-list
-
-                    initSwipeButtonRight(viewHolder, buffer);
+                    if (layoutDirection == LayoutDirection.RTL)
+                        initSwipeButtonStart(viewHolder, buffer);
+                    else
+                        initSwipeButtonEnd(viewHolder, buffer);
                     swipeButtonsBufferRight.put(position, buffer);
                 } else {
                     buffer = swipeButtonsBufferRight.get(position);
@@ -276,7 +280,11 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 List<SwipeButton> buffer = new ArrayList<>();
 
                 if (!swipeButtonsBufferLeft.containsKey(position)) {
-                    initSwipeButtonLeft(viewHolder, buffer);
+                    if (layoutDirection == LayoutDirection.RTL)
+                        initSwipeButtonEnd(viewHolder, buffer);
+                    else
+                        initSwipeButtonStart(viewHolder, buffer);
+
                     swipeButtonsBufferLeft.put(position, buffer);
                 } else {
                     buffer = swipeButtonsBufferLeft.get(position);
@@ -294,6 +302,12 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
         }
 
         super.onChildDraw(canvas, recyclerView, viewHolder, translationX, dY, actionState, isCurrentlyActive);
+    }
+
+    @Override
+    public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+        this.layoutDirection = layoutDirection;
+        return super.convertToAbsoluteDirection(flags, layoutDirection);
     }
 
     /**
@@ -353,18 +367,18 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
     }
 
     /**
-     * Declaration of Items that are drawn on the right side when swiping
+     * Declaration of Buttons that are will be drawn to the start of the swiped item
      *
      * @param viewHolder   Related Holder of @{@link RecyclerView}
      * @param swipeButtons Items which gets drawn on the right side once the user swipes an item
      */
-    public abstract void initSwipeButtonRight(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons);
+    public abstract void initSwipeButtonStart(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons);
 
     /**
-     * Declaration of Items that are drawn on the left side when swiping
+     * Declaration of Buttons that are will be drawn to the end of the swiped item
      *
      * @param viewHolder   Related Holder of @{@link RecyclerView}
      * @param swipeButtons Items which gets drawn on the left side once the user swipes an item
      */
-    public abstract void initSwipeButtonLeft(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons);
+    public abstract void initSwipeButtonEnd(RecyclerView.ViewHolder viewHolder, List<SwipeButton> swipeButtons);
 }
