@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.TypedValue;
 
 /**
  * Represents a single Swipe-Item. This can be added to any direction (LEFT or RIGHT) of
@@ -24,9 +25,17 @@ public class SwipeButton {
     private SwipeButtonClickListener clickListener;
 
     /**
-     * Width of a single @{@link SwipeButton}. Default value is {@value}.
+     * Width of a single @{@link SwipeButton} in dip. Default value is {@value}.
      */
-    static int buttonWidth = 200;
+    private static int buttonWidthDp = 100;
+
+    static void setButtonWidth(int buttonWidthDp) {
+        SwipeButton.buttonWidthDp = buttonWidthDp;
+    }
+
+    static int getButtonWidthPx() {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, buttonWidthDp, Resources.getSystem().getDisplayMetrics());
+    }
 
     /**
      * Instantiates a single instance of @{@link SwipeButton}
@@ -82,7 +91,7 @@ public class SwipeButton {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setTextSize((12 * density));
         int textColor = Color.WHITE;
-        textColor = Color.argb((int) (255 * (cWidth / (float) buttonWidth)), Color.red(textColor), Color.green(textColor), Color.blue(textColor));
+        textColor = Color.argb((int) (255 * (cWidth / (float) getButtonWidthPx())), Color.red(textColor), Color.green(textColor), Color.blue(textColor));
         paint.setColor(textColor);
         Rect textBounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), textBounds);

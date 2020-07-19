@@ -139,8 +139,8 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
         attachSwipe();
     }
 
-    public void setButtonWidth(int width) {
-        SwipeButton.buttonWidth = width;
+    public void setButtonWidth(int widthDp) {
+        SwipeButton.setButtonWidth(widthDp);
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
 
         swipeButtonsBufferRight.clear();
         swipeButtonsBufferLeft.clear();
-        swipeThreshold = 0.5f * swipeButtons.size() * SwipeButton.buttonWidth;
+        swipeThreshold = 0.5f * swipeButtons.size() * SwipeButton.getButtonWidthPx();
         recoverSwipedItem();
 
     }
@@ -262,7 +262,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 // Make sure to swipe just as wide as the width of all pre-defined SwipeButtons together
                 // Swipe to the left, means coordinates are negative values!
 
-                translationX = Math.max(dX, buffer.size() * -SwipeButton.buttonWidth);
+                translationX = Math.max(dX, buffer.size() * -SwipeButton.getButtonWidthPx());
 
                 // Draw defined SwipeButtons on the right sind of the specific item
 
@@ -288,7 +288,7 @@ public abstract class RecyclerViewSwiper extends ItemTouchHelper.SimpleCallback 
                 // Make sure to swipe just as wide as the width of all pre-defined SwipeButtons together
                 // Swipe to the right, means coordinates are positive values!
 
-                translationX = Math.min(dX, buffer.size() * SwipeButton.buttonWidth);
+                translationX = Math.min(dX, buffer.size() * SwipeButton.getButtonWidthPx());
 
                 // Draw defined SwipeButtons on the left sind of the specific item
 
